@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.json.JSONStringer;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -14,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import java.util.Map;
 
 /**
  * Created by User on 26.10.2017.
@@ -23,6 +25,7 @@ public class AsyncTransmission   {
 
     private CommunicationEventListener cel;
     private final OkHttpClient client ;
+    private Map<String, List<String>> args;
 
     public AsyncTransmission(){
         this.client = new OkHttpClient();
@@ -30,20 +33,31 @@ public class AsyncTransmission   {
 
     /**
      * Send the request to the server
-     * @param request document
+     * @param args map contening <header, <Content-type, type>>  and <body, <body content>>
      * @param url server url
      * @return
      * @throws Exception
      */
-    public void sendRequest(String request, String url) throws Exception {
+    public boolean sendRequest(String url, Map<String, List<String>> args) throws Exception {
 
-        RequestBody bodyRequest = RequestBody.create(MediaType.parse(request), request);
+      /*  RequestBody bodyRequest = RequestBody.create(MediaType.parse(request), request);
 
         Request req = new Request.Builder()
                 .url(url)
                 .header("Content-type:", "text/plain")
                 .post(bodyRequest)
                 .build();
+*/
+      if(url.isEmpty() || args.get("header").size() < 2 || args.get("body").isEmpty()){
+          return false;
+      }
+
+      RequestBody body = RequestBody.create(MediaType.parse(args.get("body").get(0)),args.get("body").get(0));
+      Request req = new Request.Builder()
+              .url(url)
+              .header(args.get("header").get(0), args.get("header").get(1))
+              .post(body)
+              .build();
 
         this.client.newCall(req).enqueue(new Callback() {
             @Override
@@ -64,6 +78,7 @@ public class AsyncTransmission   {
                 }
             }
         });
+        return true;
     }
 
 

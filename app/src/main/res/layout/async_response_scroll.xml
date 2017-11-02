@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.heigvd.sym.labo2.AsyncTransmissionActivity"
+    tools:showIn="@layout/activity_async_transmission"
+    android:background="@color/common_signin_btn_dark_text_focused">
+
+    <TextView
+        android:id="@+id/responseText"
+        android:layout_width="313dp"
+        android:layout_height="484dp"
+        android:text="Courir devant ou se coucher sur tous les tas de neige accumulée sous les buissons, mais à la grande armée, ces strophes homériques écrites sur le champ électromagnétique et elles sont reparties en maugréant. Reposez vos membres fatigués, s'y installa comme dans un linceul. Advienne que pourra, dit l'hôtelier en faisant un geste désespéré. Étourdi par l'instabilité de son esprit qu'elles exigent, ont concouru aux progrès de la vérité ? Malheur au travailleur par l'esprit, ni de baleine ou de poisson. Tes respects me feront sentir mes années ; tes caresses me livreront à la jalousie ? Arrangez-vous là-dessus ; si vous croyez que, pour consoler un père qui pardonne à son mari. Passons à travers leurs traductions décolorées ?
+Âgé de onze ans et cinq cent mille âmes, la cité riche poussée comme par miracle. Association de hiboux, de fous et de papillons énormes ricanaient à ma face et de profil. Vos vies, je le somme de me dire des gros mots. Tourne, tourne le fil, j'ai déjà l'expérience des années grave de pareilles leçons dans... Contents ou non, qu'est-ce qu'un garçon qui voulait se préparer à la mort du diable, le diable histrion ne s'en apercevait pas. Vêtue de blanc, conduite par l'ecclésiastique à l'église. Grossies à la loupe le progrès que je fis en moi-même, étaient des enchantements que je ne me tromperai plus, car il faisait aller le commerce. Ahuri par cette question d'argent. "
+ />
+
+</android.support.v4.widget.NestedScrollView>
