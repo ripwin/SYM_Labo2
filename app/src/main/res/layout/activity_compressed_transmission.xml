@@ -6,4 +6,80 @@
     android:layout_height="match_parent"
     tools:context="com.heigvd.sym.labo2.CompressedTransmissionActivity">
 
+    <TextView
+        android:id="@+id/labelFormat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Format"
+        tools:layout_editor_absoluteY="16dp"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <RadioButton
+        android:id="@+id/Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelFormat"/>
+
+    <RadioButton
+        android:id="@+id/Json"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Json"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Text" />
+
+    <RadioButton
+        android:id="@+id/XML"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XML"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Json" />
+
+    <Button
+        android:id="@+id/buttonSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="SEND"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Json" />
+
+    <ScrollView
+        android:layout_width="321dp"
+        android:layout_height="490dp"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="263dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textResponse"
+                android:layout_width="match_parent"
+                android:layout_height="226dp"
+                android:layout_marginTop="32dp"
+                android:text="Response"
+                app:layout_constraintHorizontal_bias="0.418"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonSend" />
+        </LinearLayout>
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>
