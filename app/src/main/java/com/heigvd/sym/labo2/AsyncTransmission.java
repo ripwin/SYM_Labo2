@@ -72,7 +72,6 @@ public class AsyncTransmission   {
         });
     }
 
-
     /**
      * Add listener to call when response it's received
      * @param cel listener
