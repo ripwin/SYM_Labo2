@@ -38,7 +38,7 @@ public class AsyncTransmission   {
      * @return
      * @throws Exception
      */
-    public void sendRequest(String url, Map<String, List<String>> args) throws Exception {
+    public void sendRequest(String url, Map<String, List<String>> args) throws IllegalArgumentException, IOException{
 
       if(url.isEmpty() || args.get("header").size() < 2 || args.get("body").isEmpty()){
           throw new IllegalArgumentException("header must have 2 arguments and a body");

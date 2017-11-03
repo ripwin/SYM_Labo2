@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class CompressedTransmissionActivity extends AppCompatActivity {
 
+    private AsyncTransmission asyncTransmission = new AsyncTransmission();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
