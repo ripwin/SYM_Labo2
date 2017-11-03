@@ -49,16 +49,16 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 url = urlTextView.getText().toString();
-                message= requestTextView.getText().toString();
+                message = requestTextView.getText().toString();
 
-                if(url.isEmpty() || message.isEmpty() ){
-                  // popu
-                }else{
+                if (url.isEmpty() || message.isEmpty()) {
+                    // popu
+                } else {
                     asyncTransmission.setCommunicationEventListener(new CommunicationEventListener() {
                         @Override
                         public boolean handleServerResponse(String response) {
                             args.clear();
-                            if(response.isEmpty()){
+                            if (response.isEmpty()) {
                                 responseTextView.setText("message empty");
                                 return false;
                             }
@@ -68,7 +68,7 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
                     });
 
                     try {
-                        args.put("header",  Arrays.asList("Content-type:", "text/plain") );
+                        args.put("header", Arrays.asList("Content-type:", "text/plain"));
                         args.put("body", Arrays.asList(message));
                         asyncTransmission.sendRequest(url, args);
                     } catch (Exception e) {
