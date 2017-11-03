@@ -38,18 +38,10 @@ public class AsyncTransmission   {
      * @return
      * @throws Exception
      */
-    public boolean sendRequest(String url, Map<String, List<String>> args) throws Exception {
+    public void sendRequest(String url, Map<String, List<String>> args) throws Exception {
 
-      /*  RequestBody bodyRequest = RequestBody.create(MediaType.parse(request), request);
-
-        Request req = new Request.Builder()
-                .url(url)
-                .header("Content-type:", "text/plain")
-                .post(bodyRequest)
-                .build();
-*/
       if(url.isEmpty() || args.get("header").size() < 2 || args.get("body").isEmpty()){
-          return false;
+          throw new IllegalArgumentException("header must have 2 arguments and a body");
       }
 
       RequestBody body = RequestBody.create(MediaType.parse(args.get("body").get(0)),args.get("body").get(0));
@@ -78,7 +70,6 @@ public class AsyncTransmission   {
                 }
             }
         });
-        return true;
     }
 
 

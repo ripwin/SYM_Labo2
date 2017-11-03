@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class AsyncTransmissionActivity extends AppCompatActivity {
 
-    AsyncTransmission asyncTransmission = new AsyncTransmission();
+    private AsyncTransmission asyncTransmission = new AsyncTransmission();
     private Button sendButton;
     private TextView urlTextView;
     private TextView requestTextView;
