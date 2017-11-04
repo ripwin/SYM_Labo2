@@ -6,10 +6,26 @@ public class Person {
     private final String name;
     private final String firstName;
     private String middleName;
-    private final String gender;
+    private final Gender gender;
     private final Phone[] phones;
 
-    public Person(String name, String firstName, String gender, Phone ... phones) {
+    public enum Gender {
+        Male("Male"),
+        Female("Female");
+
+        private final String gender;
+
+        private Gender(String gender) {
+            this.gender = gender;
+        }
+
+        @Override
+        public String toString() {
+            return gender;
+        }
+    }
+
+    public Person(String name, String firstName, Gender gender, Phone ... phones) {
         this.name = name;
         this.firstName = firstName;
         this.gender = gender;
@@ -22,7 +38,7 @@ public class Person {
         this.phones = Arrays.copyOf(phones, phones.length);
     }
 
-    public Person(String name, String firstName, String middleName, String gender, Phone ... phones) {
+    public Person(String name, String firstName, String middleName, Gender gender, Phone ... phones) {
         this(name, firstName, gender, phones);
         this.middleName = middleName;
     }
@@ -40,7 +56,7 @@ public class Person {
     }
 
     public String getGender() {
-        return gender;
+        return gender.toString();
     }
 
     public Phone[] getPhones() {

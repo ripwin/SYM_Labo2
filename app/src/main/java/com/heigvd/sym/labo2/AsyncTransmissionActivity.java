@@ -13,6 +13,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,6 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
     private TextView requestTextView;
     private TextView responseTextView;
 
-    private Map<String, List<String>> args;
     private String url;
     private String message;
 
@@ -35,7 +35,6 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
             url = savedInstanceState.getString("url");
             message = savedInstanceState.getString("message");
         }
-        this.args = new ArrayMap<>();
 
         setContentView(R.layout.activity_async_transmission);
 
@@ -57,7 +56,6 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
                     asyncTransmission.setCommunicationEventListener(new CommunicationEventListener() {
                         @Override
                         public boolean handleServerResponse(String response) {
-                            args.clear();
                             if (response.isEmpty()) {
                                 responseTextView.setText("message empty");
                                 return false;
@@ -68,9 +66,11 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
                     });
 
                     try {
-                        args.put("header", Arrays.asList("Content-type:", "text/plain"));
-                        args.put("body", Arrays.asList(message));
-                        asyncTransmission.sendRequest(url, args);
+
+                        HashMap<String, List<String>> headers = new HashMap<>();
+                        headers.put("Content-Type",  Arrays.asList("text/plain"));
+
+                        asyncTransmission.sendRequest(url, headers, message);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
