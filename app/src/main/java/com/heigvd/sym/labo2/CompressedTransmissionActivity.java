@@ -28,18 +28,5 @@ public class CompressedTransmissionActivity extends AppCompatActivity {
         this.textResponse = (TextView) findViewById(R.id.textResponse);
         this.bSend = (Button) findViewById(R.id.sendButton);
         this.url = "http://sym.iict.ch/";
-
-        bSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(rbText.isSelected()){
-
-                }else if(rbJson.isSelected()){
-
-                }else{
-
-                }
-            }
-        });
     }
 }
