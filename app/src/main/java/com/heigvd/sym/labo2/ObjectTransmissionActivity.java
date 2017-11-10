@@ -79,7 +79,7 @@ public class ObjectTransmissionActivity extends AppCompatActivity {
 
             try {
                 serializer.setOutput(writer);
-                serializer.startDocument("UTF-8", true);
+                serializer.startDocument("UTF-8", null);
                 serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
                 serializer.docdecl(" directory SYSTEM \"http://sym.iict.ch/directory.dtd\"");
 
