@@ -3,9 +3,9 @@ package com.heigvd.sym.labo2.com.heigvd.sym.labo2.objects;
 public class Phone {
 
     public enum Type {
-        Home("Home"),
-        Work("Work"),
-        Mobile("Mobile");
+        Home("home"),
+        Work("work"),
+        Mobile("mobile");
 
         private String name;
 

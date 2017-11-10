@@ -15,41 +15,63 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 import java.util.Map;
 
 /**
  * Created by User on 26.10.2017.
  */
 
-public class AsyncTransmission   {
+public class AsyncTransmission {
 
     private CommunicationEventListener cel;
-    private final OkHttpClient client ;
+    private final OkHttpClient client;
     private Map<String, List<String>> args;
 
-    public AsyncTransmission(){
+    public AsyncTransmission() {
         this.client = new OkHttpClient();
     }
 
     /**
      * Send the request to the server
-     * @param args map contening <header, <Content-type, type>>  and <body, <body content>>
-     * @param url server url
+     *
+     * @param headers map contening <header, <Content-type, type>>
+     * @param url  server url
      * @return
      * @throws Exception
      */
-    public void sendRequest(String url, Map<String, List<String>> args) throws IllegalArgumentException, IOException{
+    public void sendRequest(String url, Map<String, List<String>> headers, String message)
+        throws IllegalArgumentException, IOException
+    {
+        // Check URL
+        if (url.isEmpty()) {
+            throw new IllegalArgumentException("URL cannot be empty");
+        }
 
-      if(url.isEmpty() || args.get("header").size() < 2 || args.get("body").isEmpty()){
-          throw new IllegalArgumentException("header must have 2 arguments and a body");
-      }
+        RequestBody body = RequestBody.create(MediaType.parse(message), message);
 
-      RequestBody body = RequestBody.create(MediaType.parse(args.get("body").get(0)),args.get("body").get(0));
-      Request req = new Request.Builder()
-              .url(url)
-              .header(args.get("header").get(0), args.get("header").get(1))
-              .post(body)
-              .build();
+        Request.Builder builder = new Request.Builder();
+        builder.url(url);
+        builder.post(body);
+
+        for(Map.Entry<String, List<String>> e : headers.entrySet()) {
+
+            // Concat value(s)
+            String value = new String();
+            if(!e.getValue().isEmpty()) {
+                value = e.getValue().get(0);
+                for(int i = 1; i < e.getValue().size(); i++) {
+                    value += "," + e.getValue().get(i);
+                }
+            }
+
+            // Add key and value(s)
+            for(String header : e.getValue()) {
+                builder.header(e.getKey(), value);
+            }
+        }
+
+        Request req = builder.build();
 
         this.client.newCall(req).enqueue(new Callback() {
             @Override
@@ -62,7 +84,7 @@ public class AsyncTransmission   {
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     //throw new IOException("Error : " + response);
-                   throw new IOException("Error : " + response);
+                    throw new IOException("Error : " + response);
                 } else {
                     // Read data in the worker thread
                     final String data = response.body().string();
@@ -74,9 +96,10 @@ public class AsyncTransmission   {
 
     /**
      * Add listener to call when response it's received
+     *
      * @param cel listener
      */
-    public void setCommunicationEventListener (CommunicationEventListener cel){
+    public void setCommunicationEventListener(CommunicationEventListener cel) {
         this.cel = cel;
     }
 
