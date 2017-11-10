@@ -17,6 +17,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by User on 26.10.2017.
@@ -29,7 +30,12 @@ public class AsyncTransmission {
     private Map<String, List<String>> args;
 
     public AsyncTransmission() {
-        this.client = new OkHttpClient();
+
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     /**
