@@ -1,5 +1,9 @@
 package com.heigvd.sym.labo2;
 
+import android.app.AuthenticationRequiredException;
+import android.webkit.HttpAuthHandler;
+
+import java.net.HttpURLConnection;
 import java.util.EventListener;
 
 /**

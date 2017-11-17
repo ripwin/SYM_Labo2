@@ -25,6 +25,8 @@
 
 \usepackage{hhline,tabu}
 
+\frenchbsetup{StandardLists=true}
+
 % -----------------------------------------------------------------------
 % --- CODE JAVA ---
 % -----------------------------------------------------------------------
@@ -112,8 +114,27 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
+	Il faudrait soulever des exceptions plus précises sur le problème rencontré lors de la communication avec le serveur. Ainsi l'application principale peut traiter ces différents cas possible. \\
+	Par exemple si une authentification a échouée, l'application sait qu'il faut se reconnecter et renvoyer la requête. Et comme elle sait que ce problème peut survenir, elle peut s'y préparer et le gérer. 
+	
+	On pourrait proposer des interfaces de ce type : 
+	\begin{itemize}
+		\item sendRequest
+		\begin{itemize}
+			\item IllegalArgumentException : les paramètres reçu ne sont pas conforme à ceux attendus par la méthode.
+			\item IOException : problème de communication sur le réseau
+		\end{itemize}
+		\item setCommunicationEventListener
+		\begin{itemize}
+			\item HTTPException : pour traiter les différents cas lié au code d'erreur HTTP. Exemple : code 401 Unauthorized, lorsque le serveur nécessite une connexion.
+		\end{itemize}
+	
+	Il serait également possible pour les HTTPException de les catch et de relever l'exception avec plus de détails, pour déjà filtrer et indiquer les cas à traiter par l'application principale.
+		
+	\end{itemize}
+	
 	\begin{lstlisting}[style=javaCode]
-	public String sendRequest(String request, String url) throws Exception 
+	public String sendRequest(String request, String url) throws IllegalArgumentException, IOException 
 	public void setCommunicationEventListener (CommunicationEventListener l) 
 	\end{lstlisting}
 	
@@ -122,8 +143,7 @@
 	
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
-	
-	Réponse
+	L'authentification auprès du serveur n'empêche pas l'utilisation d'un protocole asynchrone. 
 	
 	
 	\section*{Questions 3 - Threads concurrents}
