@@ -143,15 +143,21 @@
 	
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
-	L'authentification auprès du serveur n'empêche pas l'utilisation d'un protocole asynchrone. 
 	
+	L'authentification et l'utilisation d'une transmission différée n'est pas un problème avec les transmissions asynchrones. 
+	
+	Les restrictions peuvent être diverses. Comme soulevé à la question 1, si on lève des exceptions précisent permettant à l'application principale de gérer les erreurs du protocole, serveur ou client, il est possible de parer au problème d'identification. 
+	
+	Par exemple si on utilise un token pour identifier le client et que celui-ci n'est plus valide lors de l'envoi de la requête, on signale à l'application le problème au travers d'une exception. L'application pourra par exemple notifié l'utilisateur qu'une authentification est requise, et une fois celle-ci faite regénérer la requête. Cela implique de sauvegarder les requêtes n'ayant pas aboutie. 
+	
+	Il est également possible de mettre en place un système d'échange de clé pour authentifier le client. A noter que la clé ne doit pas être enregistré dans l'application avant son installation, sans quoi elle serait vulnérable.
 	
 	\section*{Questions 3 - Threads concurrents}
 	Lors de l'utilisation de protocoles asynchrones, c'est généralement deux threads différents qui se préoccupent de la préparation, de l'envoi, de la réception et du traitement des données. Quels problèmes cela peut-il poser ?
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	Réponse
+	De base il n'y a pas de priorité sur les tâches a exécuter. Ainsi il est possible qu'une action "mineur" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
 	
 	\section*{Questions 4 - Écriture différée}    
 	Lorsque l'on implémente l'écriture différée, il arrive que l'on ait soudainement plusieurs transmissions en attente qui deviennent possibles simultanément. Comment implémenter proprement cette situation (sans réalisation pratique) ? Voici deux possibilités :
