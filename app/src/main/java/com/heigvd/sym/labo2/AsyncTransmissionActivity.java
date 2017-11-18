@@ -28,6 +28,8 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
     private String url;
     private String message;
 
+    private Thread runOnUiThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +57,29 @@ public class AsyncTransmissionActivity extends AppCompatActivity {
                 } else {
                     asyncTransmission.setCommunicationEventListener(new CommunicationEventListener() {
                         @Override
-                        public boolean handleServerResponse(String response) {
-                            if (response.isEmpty()) {
-                                responseTextView.setText("message empty");
+                        public boolean handleServerResponse(final byte[] response) {
+
+                            final String data = new String(response);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+
+                                    if (data.isEmpty()) {
+                                        responseTextView.setText("message empty");
+
+                                    }
+                                    else {
+                                        responseTextView.setText(data);
+                                    }
+                                }
+                            });
+
+                            if(data.isEmpty()) {
                                 return false;
                             }
-                            responseTextView.setText(response);
+
                             return true;
                         }
                     });

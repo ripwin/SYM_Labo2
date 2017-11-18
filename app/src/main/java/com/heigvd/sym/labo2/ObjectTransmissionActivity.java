@@ -37,8 +37,8 @@ public class ObjectTransmissionActivity extends AppCompatActivity {
         this.transmission = new AsyncTransmission();
         this.transmission.setCommunicationEventListener(new CommunicationEventListener() {
             @Override
-            public boolean handleServerResponse(String response) {
-                System.out.println("Output object : " + response);
+            public boolean handleServerResponse(byte[] response) {
+                System.out.println("Output object : " + new String(response));
                 return true;
             }
         });

@@ -49,12 +49,18 @@ public class AsyncTransmission {
     public void sendRequest(String url, Map<String, List<String>> headers, String message)
         throws IllegalArgumentException, IOException
     {
+        sendRequest(url, headers, message.getBytes());
+    }
+
+    public void sendRequest(String url, Map<String, List<String>> headers, byte[] message)
+            throws IllegalArgumentException, IOException
+    {
         // Check URL
         if (url.isEmpty()) {
             throw new IllegalArgumentException("URL cannot be empty");
         }
 
-        RequestBody body = RequestBody.create(MediaType.parse(message), message);
+        RequestBody body = RequestBody.create(null, message);
 
         Request.Builder builder = new Request.Builder();
         builder.url(url);
@@ -93,7 +99,7 @@ public class AsyncTransmission {
                     throw new IOException("Error : " + response);
                 } else {
                     // Read data in the worker thread
-                    final String data = response.body().string();
+                    final byte[] data = response.body().bytes();
                     cel.handleServerResponse(data);
                 }
             }
