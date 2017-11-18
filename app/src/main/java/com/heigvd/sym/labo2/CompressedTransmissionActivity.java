@@ -21,6 +21,7 @@ public class CompressedTransmissionActivity extends AppCompatActivity {
 
     private Button sendButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

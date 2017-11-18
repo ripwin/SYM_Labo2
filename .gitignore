@@ -54,3 +54,15 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# latex
+rapport/*.log
+rapport/*.lof
+rapport/*.aux
+rapport/*.gz
+rapport/*.lot
+rapport/*.out
+rapport/*.bbl
+rapport/*.blg
+rapport/*.toc
+rapport/*.pdf
