@@ -136,6 +136,14 @@
 	
 	Cela peut poser problème dans de très nombreux domaines. Une solution possible serait de sauvegarder les informations en mémoire persistante lorsque l'activité en question est détruite et de lire ces informations lorsqu'on démarre à nouveau l'application ou l'activité concernée. Cela deviendra vite difficile de garder un logicielle modulable cela dit.
 	
+	\subsubsection*{JobScheduler}
+	Depuis Android 5.0 (Lollipop), la class abstraite JobScheduler est proposée et permet de de planifier des actions à effectuer. Apparemment elle permet de planifier des actions non seulement à certains intervalles de temps, mais également lorsque certaines conditions sont remplies. On pourrait donc utiliser cet API pour gérer nos requêtes qui ont échouées et demander qu'elles soient envoyées lorsque l'appareil possède à nouveau une connexion internet. 
+	
+	\textbf{Sources (consultées le 19.11.2017) :}
+	
+	https://josiassena.com/the-jobscheduler-on-android/ \\
+	https://medium.com/google-developers/scheduling-jobs-like-a-pro-with-jobscheduler-286ef8510129 \\
+	https://josiassena.com/the-jobscheduler-on-android/ \\
 	
 	
 	\section*{Réponse aux questions}
