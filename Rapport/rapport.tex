@@ -223,13 +223,13 @@
 	\subsubsection*{Effectuer une connexion par transmission différée}
 	Lorsqu'on décide d'effectuer une connexion par transmission, cela a pour avantage de ne pas changer le protocole de base utilisé pour les transmissions en temps normal. Le serveur pourra traiter chaque transmission comme si elle n'était pas différée. 
 	
-	En revanche cela peut poser des problèmes au niveau des débits de connexion. En effet envoyer beaucoup de transmission presque simultanément peut utiliser beaucoup de bande passante. Sur mobile, c'est embêtant. 
+	En revanche cela peut poser des problèmes au niveau des débits de connexion. En effet envoyer beaucoup de transmissions presque simultanément peut utiliser beaucoup de bande passante. Sur mobile, c'est embêtant. 
 	\subsubsection*{Effectuer une seule connexion pour toutes les transmissions différées}
-	Si on décide de regrouper toutes les transmissions sur une seule connexion, cela peut permettre d'éviter un échange inutile d'information. Par exemple, en HTPP, cela permet de n'avoir qu'une fois la phase de Handshake pour N transmissions, contrairement à N fois la phase de Handshake pour la solution précédente. 
+	Si on décide de regrouper toutes les transmissions sur une seule connexion, cela peut permettre d'éviter un échange inutile d'information. Par exemple, en HTTP, cela permet de n'avoir qu'une fois la phase de Handshake pour N transmissions, contrairement à N fois la phase de Handshake pour la solution précédente. 
 	
-	En revanche, cela demande d'adapter le protocole pour que le serveur puisse savoir qu'il s'agit d'une transmission multiple. Il faut également prévoir une solution pour que le serveur puisse retourner les réponses éventuelles en donnant un moyen d'identifier la transmission correspondante pour l'application client. Par exemple chaque transmission aurait son identifiant unique et la réponse du serveur marquerait chaque réponse avec l'identifiant de la requête concernée.
+	En revanche, cela demande d'adapter le protocole pour que le serveur puisse savoir qu'il s'agit d'une transmission multiple. Il faut également prévoir une solution pour que le serveur puisse retourner les réponses éventuelles en donnant un moyen d'identifier la transmission correspondante. Par exemple chaque transmission aurait son identifiant unique et la réponse du serveur marquerait chaque réponse avec l'identifiant de la requête concernée.
 	
-	Les deux solutions présentent leurs avantages et inconvénients. La première est la solution la plus simple du point de vue implémentation, mais souffre de défauts de performance et d'optimisation. La seconde en revanche permet d'optimiser la communication mais demande de développer un protocole de communication dédié et complexifie beaucoup la gestion de requêtes et de réponses entre le serveur et le client.
+	Les deux solutions présentent leurs avantages et inconvénients. La première est la solution la plus simple du point de vue implémentation, mais souffre de défauts de performance et d'optimisation. La seconde en revanche, permet d'optimiser la communication mais demande de développer un protocole de communication dédié et complexifie beaucoup la gestion de requêtes et de réponses entre le serveur et le client.
 	
 	
 	\subsection*{Questions 5 - Transmission d'objets}  
