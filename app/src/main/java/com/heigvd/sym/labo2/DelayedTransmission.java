@@ -28,10 +28,13 @@ public class DelayedTransmission {
 
 
     private CommunicationEventListener cel;
-    private final OkHttpClient client;
+    private OkHttpClient client;
     private Map<String, List<String>> args;
 
     private List<Request> failedRequests;
+
+    // Whether or not a new try to send failed requests is already scheduled or not
+    private boolean isRequestSendingTryScheduled;
 
     public DelayedTransmission() {
         this.client = new OkHttpClient.Builder()
@@ -98,14 +101,8 @@ public class DelayedTransmission {
             public void onFailure(Call call, IOException e) {
                 System.out.println("An error occured...");
                 addFailedRequest(call.request());
-
-
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        retryFailedRequests();
-                    }
-                }, 10000);
+                scheduleRequestSending();
+                System.out.println("A new try has been scheduled if needed.");
             }
 
             @Override
@@ -122,11 +119,35 @@ public class DelayedTransmission {
         });
     }
 
+    /**
+     * Schedule a new try for sending new requests. If a new try has already been scheduled and
+     * hasn't been completed yet, the method doesn't do anything.
+     */
+    private synchronized void scheduleRequestSending() {
+        if (!isRequestSendingTryScheduled) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    retryFailedRequests();
+                }
+            }, 10000);
+            isRequestSendingTryScheduled = true;
+        }
+    }
+
+    /**
+     * Add a request to our list of failed requests.
+     * @param request the request to try to send later
+     */
     private synchronized void addFailedRequest(Request request) {
         System.out.println("Adding a request to failed requests");
         failedRequests.add(request);
     }
 
+    /**
+     * Tries to send failed requests again. This method sends every failed request in our list of
+     * failed requests. It also sets reset the isRequestSendingTryScheduled to false.
+     */
     private synchronized void retryFailedRequests() {
         System.out.println("Sending failed requests again...");
         for (Request r : failedRequests) {
@@ -134,6 +155,7 @@ public class DelayedTransmission {
         }
 
         failedRequests.clear();
+        isRequestSendingTryScheduled = false;
     }
 
 
