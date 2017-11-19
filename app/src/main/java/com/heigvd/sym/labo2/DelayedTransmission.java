@@ -21,16 +21,19 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by mathieu on 19.11.17.
+ * DelayedTransmission class. This class allows its users to send asynchronous HTTP requests and
+ * will take responsability to send failed requests again after a given timeout.
+ *
+ * Users can set a CommunicationEventListener object to be notified when a requests has received a
+ * successful response.
  */
 
 public class DelayedTransmission {
-
-
     private CommunicationEventListener cel;
     private OkHttpClient client;
     private Map<String, List<String>> args;
 
+    // List of failed requests to be sent again
     private List<Request> failedRequests;
 
     // Whether or not a new try to send failed requests is already scheduled or not
@@ -51,7 +54,6 @@ public class DelayedTransmission {
      *
      * @param headers map contening <header, <Content-type, type>>
      * @param url  server url
-     * @return
      * @throws Exception
      */
     public void sendRequest(String url, Map<String, List<String>> headers, String message)
@@ -95,10 +97,15 @@ public class DelayedTransmission {
         sendRequest(req);
     }
 
+    /**
+     * Private method to send a given Request object.
+     * @param request the request to send
+     */
     private void sendRequest(Request request) {
         this.client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                // When an error occured, schedule a new try
                 System.out.println("An error occured...");
                 addFailedRequest(call.request());
                 scheduleRequestSending();
@@ -108,10 +115,9 @@ public class DelayedTransmission {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    //throw new IOException("Error : " + response);
                     throw new IOException("Error : " + response);
                 } else {
-                    // Read data in the worker thread
+                    // Notify the listener of the response
                     final byte[] data = response.body().bytes();
                     cel.handleServerResponse(data);
                 }
@@ -158,10 +164,11 @@ public class DelayedTransmission {
         isRequestSendingTryScheduled = false;
     }
 
-
+    /**
+     * Sets the CommunicationEventListener property.
+     * @param cel the CommunicationEventListener object to set
+     */
     public void setCommunicationEventListener(CommunicationEventListener cel) {
         this.cel = cel;
     }
-
-
 }
