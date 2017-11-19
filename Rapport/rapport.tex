@@ -157,41 +157,32 @@
 	Pour répondre à cette question il faut d’abord spécifier le contexte de transmission.
 	
 	\subsubsection*{Dans le cas d’une transmission synchrone}
-	Il faudrait modifier les signatures des méthodes pour inclure des levées d’exceptions plus précises. 
+	Il faudrait modifier la signature de la méthode sendRequest pour inclure des levées d’exceptions plus précises. 
 	
-	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envois au serveur et permettre à l’application de modifier la structure de sa requête.
+	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envois au serveur et permettre à l’application de modifier la structure de sa requête. Et toutes les exceptions nécessaires pour réagir en cas d'erreur en réponse du serveur. Une réponse sans échec utiliserait le type de retour de la méthode pour être transmise à l'application. 
 	
-	La méthode handleServerResponse devrait elle aussi levées des exceptions concernant les problèmes rencontrés lors de la transmission afin d’y remédier.
+	Par exemple une requête nécessitant une authentification qui n’aura pas pu être transmise avant que le token d’authentification périme ne pourra pas aboutir. Dans ce cas il faudra lever une exception pour prévenir l’application de cet échec et lui permettre de demander une nouvelle connexion à l’utilisateur et une fois celle-ci faite, renvoyer la requête échouée.
 	
-	Par exemple une requête nécessitant une authentification qui n’aura pas pu être transmise avant que le token d’authentification périme ne pourra pas aboutir. Dans ce cas il faudra lever une exception pour prévenir l’application de cet échec et lui permettre de demaner une nouvelle connexion à l’utilisateur et une fois celle-ci faite, renvoyer la requête échouée.
-	Evidemment cela implique d’utiliser un système de sauvegarde, par exemple un cache, une base de données, ou autres, pour conserver les requêtes qui n’ont pu être traitées.  Et encore décidé de quels informations seront conservées pour que l’application puisse les réutiliser.
+	Évidemment cela implique d’utiliser un système de sauvegarde, par exemple un cache, une base de données, ou autres, pour conserver les requêtes qui n’ont pu être traitées.  Et encore décidé de quels informations seront conservées pour que l’application puisse les réutiliser.
 	
-	On pourrait proposer des interfaces de ce type : 
+	On pourrait proposer une méthode comme ceci : 
 	\begin{itemize}
 		\item sendRequest
 		\begin{itemize}
 			\item IllegalArgumentException : les paramètres reçu ne sont pas conforme à ceux attendus par la méthode.
 			\item IOException : problème de communication sur le réseau
-		\end{itemize}
-		\item handleServerResponse
-		\begin{itemize}
 			\item HTTPException : pour traiter les différents cas lié au code d'erreur HTTP. Exemple : code 401 Unauthorized, lorsque le serveur nécessite une connexion.
 		\end{itemize}
+	\end{itemize}
 	
-	Il serait également possible pour les HTTPException de les catch et de relever l'exception avec plus de détails, pour déjà filtrer et indiquer les cas à traiter par l'application principale.
+	\begin{lstlisting}[style=javaCode]
+		public String sendRequest(String request, String url) throws IllegalArgumentException, IOException, HTTPException
+	\end{lstlisting}
 	
 	\subsubsection*{Dans le cas d’une transmission asynchrone}
 	Les transmissions asynchrones utilisent le concept de callback. C’est la méthode que nous avons utilisée dans notre labo. Pour pouvoir transmettre l’erreur à l’application principale il faut ajouter une méthode error à l’interface CommunicationEventListener qui sera appelée dans le cas d’une transaction échouée. La classe AsyncTransmission pourra retransmettre les informations nécessaires concernant l’erreur rencontrée au travers de cette méthode. 
 	
 	Ainsi, comme pour l’autre solution, nous offrons la possibilité de réagir en cas d’erreur et de prendre les décisions utiles à l’application. 
-	
-		
-	\end{itemize}
-	
-	\begin{lstlisting}[style=javaCode]
-	public String sendRequest(String request, String url) throws IllegalArgumentException, IOException 
-	public void setCommunicationEventListener (CommunicationEventListener l) 
-	\end{lstlisting}
 	
 	\subsection*{Questions 2 - Authentification}
 	Si une authentification par le serveur est requise, peut-ont utiliser un protocole asynchrone ? Quelles seraient les restrictions ? Peut-on utiliser une transmission différée ?
