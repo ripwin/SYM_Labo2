@@ -136,6 +136,14 @@
 	
 	Cela peut poser problème dans de très nombreux domaines. Une solution possible serait de sauvegarder les informations en mémoire persistante lorsque l'activité en question est détruite et de lire ces informations lorsqu'on démarre à nouveau l'application ou l'activité concernée. Cela deviendra vite difficile de garder un logicielle modulable cela dit.
 	
+	\subsubsection*{JobScheduler}
+	Depuis Android 5.0 (Lollipop), la class abstraite JobScheduler est proposée et permet de de planifier des actions à effectuer. Apparemment elle permet de planifier des actions non seulement à certains intervalles de temps, mais également lorsque certaines conditions sont remplies. On pourrait donc utiliser cet API pour gérer nos requêtes qui ont échouées et demander qu'elles soient envoyées lorsque l'appareil possède à nouveau une connexion internet. 
+	
+	\textbf{Sources (consultées le 19.11.2017) :}
+	
+	https://josiassena.com/the-jobscheduler-on-android/ \\
+	https://medium.com/google-developers/scheduling-jobs-like-a-pro-with-jobscheduler-286ef8510129 \\
+	https://josiassena.com/the-jobscheduler-on-android/ \\
 	
 	
 	\section*{Réponse aux questions}
@@ -146,29 +154,35 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	Il faudrait soulever des exceptions plus précises sur le problème rencontré lors de la communication avec le serveur. Ainsi l'application principale peut traiter ces différents cas possible. \\
-	Par exemple si une authentification a échouée, l'application sait qu'il faut se reconnecter et renvoyer la requête. Et comme elle sait que ce problème peut survenir, elle peut s'y préparer et le gérer. 
+	Pour répondre à cette question il faut d’abord spécifier le contexte de transmission.
 	
-	On pourrait proposer des interfaces de ce type : 
+	\subsubsection*{Dans le cas d’une transmission synchrone}
+	Il faudrait modifier la signature de la méthode sendRequest pour inclure des levées d’exceptions plus précises. 
+	
+	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envois au serveur et permettre à l’application de modifier la structure de sa requête. Et toutes les exceptions nécessaires pour réagir en cas d'erreur en réponse du serveur. Une réponse sans échec utiliserait le type de retour de la méthode pour être transmise à l'application. 
+	
+	Par exemple une requête nécessitant une authentification qui n’aura pas pu être transmise avant que le token d’authentification périme ne pourra pas aboutir. Dans ce cas il faudra lever une exception pour prévenir l’application de cet échec et lui permettre de demander une nouvelle connexion à l’utilisateur et une fois celle-ci faite, renvoyer la requête échouée.
+	
+	Évidemment cela implique d’utiliser un système de sauvegarde, par exemple un cache, une base de données, ou autres, pour conserver les requêtes qui n’ont pu être traitées.  Et encore décidé de quels informations seront conservées pour que l’application puisse les réutiliser.
+	
+	On pourrait proposer une méthode comme ceci : 
 	\begin{itemize}
 		\item sendRequest
 		\begin{itemize}
 			\item IllegalArgumentException : les paramètres reçu ne sont pas conforme à ceux attendus par la méthode.
 			\item IOException : problème de communication sur le réseau
-		\end{itemize}
-		\item setCommunicationEventListener
-		\begin{itemize}
 			\item HTTPException : pour traiter les différents cas lié au code d'erreur HTTP. Exemple : code 401 Unauthorized, lorsque le serveur nécessite une connexion.
 		\end{itemize}
-	
-	Il serait également possible pour les HTTPException de les catch et de relever l'exception avec plus de détails, pour déjà filtrer et indiquer les cas à traiter par l'application principale.
-		
 	\end{itemize}
 	
 	\begin{lstlisting}[style=javaCode]
-	public String sendRequest(String request, String url) throws IllegalArgumentException, IOException 
-	public void setCommunicationEventListener (CommunicationEventListener l) 
+		public String sendRequest(String request, String url) throws IllegalArgumentException, IOException, HTTPException
 	\end{lstlisting}
+	
+	\subsubsection*{Dans le cas d’une transmission asynchrone}
+	Les transmissions asynchrones utilisent le concept de callback. C’est la méthode que nous avons utilisée dans notre labo. Pour pouvoir transmettre l’erreur à l’application principale il faut ajouter une méthode error à l’interface CommunicationEventListener qui sera appelée dans le cas d’une transaction échouée. La classe AsyncTransmission pourra retransmettre les informations nécessaires concernant l’erreur rencontrée au travers de cette méthode. 
+	
+	Ainsi, comme pour l’autre solution, nous offrons la possibilité de réagir en cas d’erreur et de prendre les décisions utiles à l’application. 
 	
 	\subsection*{Questions 2 - Authentification}
 	Si une authentification par le serveur est requise, peut-ont utiliser un protocole asynchrone ? Quelles seraient les restrictions ? Peut-on utiliser une transmission différée ?
@@ -189,7 +203,11 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	De base il n'y a pas de priorité sur les tâches a exécuter. Ainsi il est possible qu'une action "mineur" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
+	
+	Un thread autre que le thread UI ne doit pas modifier la vue. Si d'autres threads pouvaient modifier la vue on aurait des problèmes de concurrences. Imaginons 2 threads s'occupent de gérer de A à Z la communication, préparation, envoi, réception et mis à jour de l’UI. Si le thread A commencé à modifier la vue et se fait préempter, le thread B commence à son tour  à modifier la vue en partie et se fait préempter.. Il n'y a plus aucune cohérences entres les données. Par contre si seul le thread de l'UI à droit de modifier l’UI alors on assure la cohérence des données. Car quelques soit les requêtes en attente de traitement, elles seront traitées séquentiellement les unes après les autres.
+	
+	Un autre problème moins grave est que de base il n'y a pas de priorité sur les tâches à exécuter. Ainsi il est possible qu'une action "mineure" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
+
 	
 	\subsection*{Questions 4 - Écriture différée}    
 	Lorsque l'on implémente l'écriture différée, il arrive que l'on ait soudainement plusieurs transmissions en attente qui deviennent possibles simultanément. Comment implémenter proprement cette situation (sans réalisation pratique) ? Voici deux possibilités :
@@ -202,7 +220,16 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	Réponse
+	\subsubsection*{Effectuer une connexion par transmission différée}
+	Lorsqu'on décide d'effectuer une connexion par transmission, cela a pour avantage de ne pas changer le protocole de base utilisé pour les transmissions en temps normal. Le serveur pourra traiter chaque transmission comme si elle n'était pas différée. 
+	
+	En revanche cela peut poser des problèmes au niveau des débits de connexion. En effet envoyer beaucoup de transmission presque simultanément peut utiliser beaucoup de bande passante. Sur mobile, c'est embêtant. 
+	\subsubsection*{Effectuer une seule connexion pour toutes les transmissions différées}
+	Si on décide de regrouper toutes les transmissions sur une seule connexion, cela peut permettre d'éviter un échange inutile d'information. Par exemple, en HTPP, cela permet de n'avoir qu'une fois la phase de Handshake pour N transmissions, contrairement à N fois la phase de Handshake pour la solution précédente. 
+	
+	En revanche, cela demande d'adapter le protocole pour que le serveur puisse savoir qu'il s'agit d'une transmission multiple. Il faut également prévoir une solution pour que le serveur puisse retourner les réponses éventuelles en donnant un moyen d'identifier la transmission correspondante pour l'application client. Par exemple chaque transmission aurait son identifiant unique et la réponse du serveur marquerait chaque réponse avec l'identifiant de la requête concernée.
+	
+	Les deux solutions présentent leurs avantages et inconvénients. La première est la solution la plus simple du point de vue implémentation, mais souffre de défauts de performance et d'optimisation. La seconde en revanche permet d'optimiser la communication mais demande de développer un protocole de communication dédié et complexifie beaucoup la gestion de requêtes et de réponses entre le serveur et le client.
 	
 	
 	\subsection*{Questions 5 - Transmission d'objets}  
