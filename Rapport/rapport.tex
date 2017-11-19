@@ -131,6 +131,13 @@
 	
 	Pour l'affichage des réponses du serveur, nous affichons la première ligne dans l'interface utilisateur et la réponse au complet dans la console. Chaque transmission possède un numéro incrémental pour mieux les distinguer.
 	
+	\subsubsection*{Limitations}
+	Les limitations de cette solutions sont évidentes. La liste de requêtes en échec sont contenues en mémoire dans l'instance de l'activité en question. Si l'utilisateur quitte l'activité, ou quitte l'application avant que les requêtes soient effectuées avec succès, la liste de requêtes qui ont échouées seront perdues. 
+	
+	Cela peut poser problème dans de très nombreux domaines. Une solution possible serait de sauvegarder les informations en mémoire persistante lorsque l'activité en question est détruite et de lire ces informations lorsqu'on démarre à nouveau l'application ou l'activité concernée. Cela deviendra vite difficile de garder un logicielle modulable cela dit.
+	
+	
+	
 	\section*{Réponse aux questions}
 	
 	\subsection*{Questions 1 - Traitement des erreurs}
