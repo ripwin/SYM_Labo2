@@ -108,7 +108,11 @@
 	
 	\setlength{\parskip}{1em}
 	
-	\section*{Questions 1 - Traitement des erreurs}
+	\section*{Manipulations}
+	
+	\section*{Réponse aux questions}
+	
+	\subsection*{Questions 1 - Traitement des erreurs}
 	
 	Les interfaces \textit{AsyncSendRequest} et \textit{CommunicationEventListener} utilisées au point 3.1 restent très (certainement trop) simples pour être utilisables dans une vrai application : que se passe-t-il si le serveur n'est pas joignable dans l'immédiat ou s'il retourne un code HTTP d'erreur ? Vous pouvez par exemple proposer une nouvelle version de ces deux interfaces pour vous aider à illustrer votre réponse.
 	
@@ -138,7 +142,7 @@
 	public void setCommunicationEventListener (CommunicationEventListener l) 
 	\end{lstlisting}
 	
-	\section*{Questions 2 - Authentification}
+	\subsection*{Questions 2 - Authentification}
 	Si une authentification par le serveur est requise, peut-ont utiliser un protocole asynchrone ? Quelles seraient les restrictions ? Peut-on utiliser une transmission différée ?
 	
 	
@@ -152,14 +156,14 @@
 	
 	Il est également possible de mettre en place un système d'échange de clé pour authentifier le client. A noter que la clé ne doit pas être enregistré dans l'application avant son installation, sans quoi elle serait vulnérable.
 	
-	\section*{Questions 3 - Threads concurrents}
+	\subsection*{Questions 3 - Threads concurrents}
 	Lors de l'utilisation de protocoles asynchrones, c'est généralement deux threads différents qui se préoccupent de la préparation, de l'envoi, de la réception et du traitement des données. Quels problèmes cela peut-il poser ?
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
 	De base il n'y a pas de priorité sur les tâches a exécuter. Ainsi il est possible qu'une action "mineur" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
 	
-	\section*{Questions 4 - Écriture différée}    
+	\subsection*{Questions 4 - Écriture différée}    
 	Lorsque l'on implémente l'écriture différée, il arrive que l'on ait soudainement plusieurs transmissions en attente qui deviennent possibles simultanément. Comment implémenter proprement cette situation (sans réalisation pratique) ? Voici deux possibilités :
 	\begin{itemize}
 		\item Effectuer une connexion par transmission différée
@@ -173,7 +177,7 @@
 	Réponse
 	
 	
-	\section*{Questions 5 - Transmission d'objets}  
+	\subsection*{Questions 5 - Transmission d'objets}  
 	\begin{enumerate}
 		\item Quel inconvénient y a-t'il à utiliser une infrastructure de type REST/JSON n'offrant aucun service de validation (DTD, XML-schéma, WSDL) par rapport à une infrastructure comme SOAP offrant ces possibilités ? Y a-t'il en revanche des avantages que vous pouvez citer ?
 		\item L'utilisation d'un mécanisme comme Protocol Buffer est-elle compatible avec une architecture basée sur HTTP? Veuillez discuter des éventuelles avantages ou limitations par rapport à un protocole basé sur JSON ou XML.
@@ -183,7 +187,7 @@
 	
 	Réponse
 	
-	\section*{Question 6 - Transmission compressée}
+	\subsection*{Question 6 - Transmission compressée}
 	Quel gain peut-on constater en moyenne sur des fichiers texte (xml et json sont aussi du texte) en utilisant de la compression du point 3.4 ? Vous comparerez vos résultats par rapport au gain théorique d'une compression DEFLATE, vous enverrez plusieurs tailles de contenu pour comparer.
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
