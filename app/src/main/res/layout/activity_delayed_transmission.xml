@@ -6,4 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.heigvd.sym.labo2.DelayedTransmissionActivity">
 
+    <RelativeLayout
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        tools:layout_editor_absoluteX="6dp"
+        tools:layout_editor_absoluteY="10dp">
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send" />
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
