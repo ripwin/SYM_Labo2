@@ -203,7 +203,11 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	De base il n'y a pas de priorité sur les tâches a exécuter. Ainsi il est possible qu'une action "mineur" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
+	
+	Un thread autre que le thread UI ne doit pas modifier la vue. Si d'autres threads pouvaient modifier la vue on aurait des problèmes de concurrences. Imaginons 2 threads s'occupent de gérer de A à Z la communication, préparation, envoi, réception et mis à jour de l’UI. Si le thread A commencé à modifier la vue et se fait préempter, le thread B commence à son tour  à modifier la vue en partie et se fait préempter.. Il n'y a plus aucune cohérences entres les données. Par contre si seul le thread de l'UI à droit de modifier l’UI alors on assure la cohérence des données. Car quelques soit les requêtes en attente de traitement, elles seront traitées séquentiellement les unes après les autres.
+	
+	Un autre problème moins grave est que de base il n'y a pas de priorité sur les tâches à exécuter. Ainsi il est possible qu'une action "mineure" passe devant une demande d'authentification. Par exemple l'affichage d'une image. Pour parer à ce problème il est possible de créer un ordre de priorité sur les communicationEventListener reçu par le protocole de communication. 
+
 	
 	\subsection*{Questions 4 - Écriture différée}    
 	Lorsque l'on implémente l'écriture différée, il arrive que l'on ait soudainement plusieurs transmissions en attente qui deviennent possibles simultanément. Comment implémenter proprement cette situation (sans réalisation pratique) ? Voici deux possibilités :
