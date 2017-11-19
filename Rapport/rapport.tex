@@ -156,7 +156,7 @@
 	
 	Pour répondre à cette question il faut d’abord spécifier le contexte de transmission.
 	
-	\subsection{Dans le cas d’une transmission synchrone}
+	\subsubsection*{Dans le cas d’une transmission synchrone}
 	Il faudrait modifier les signatures des méthodes pour inclure des levées d’exceptions plus précises. 
 	
 	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envois au serveur et permettre à l’application de modifier la structure de sa requête.
@@ -180,7 +180,7 @@
 	
 	Il serait également possible pour les HTTPException de les catch et de relever l'exception avec plus de détails, pour déjà filtrer et indiquer les cas à traiter par l'application principale.
 	
-	\subsection{Dans le cas d’une transmission asynchrone}
+	\subsubsection*{Dans le cas d’une transmission asynchrone}
 	Les transmissions asynchrones utilisent le concept de callback. C’est la méthode que nous avons utilisée dans notre labo. Pour pouvoir transmettre l’erreur à l’application principale il faut ajouter une méthode error à l’interface CommunicationEventListener qui sera appelée dans le cas d’une transaction échouée. La classe AsyncTransmission pourra retransmettre les informations nécessaires concernant l’erreur rencontrée au travers de cette méthode. 
 	
 	Ainsi, comme pour l’autre solution, nous offrons la possibilité de réagir en cas d’erreur et de prendre les décisions utiles à l’application. 
