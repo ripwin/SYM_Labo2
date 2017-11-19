@@ -154,24 +154,24 @@
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
-	Pour répondre à cette question il faut d’abord spécifier le contexte de transmission.
+	Pour répondre à cette question, il faut d’abord spécifier le contexte de transmission.
 	
 	\subsubsection*{Dans le cas d’une transmission synchrone}
 	Il faudrait modifier la signature de la méthode sendRequest pour inclure des levées d’exceptions plus précises. 
 	
-	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envois au serveur et permettre à l’application de modifier la structure de sa requête. Et toutes les exceptions nécessaires pour réagir en cas d'erreur en réponse du serveur. Une réponse sans échec utiliserait le type de retour de la méthode pour être transmise à l'application. 
+	La méthode SendRequest devrait lever toutes les exceptions relatives à des mauvaises données reçues avant tous envoi au serveur et permettre à l’application de modifier la structure de sa requête. Elle devrait également lever toutes les exceptions nécessaires pour réagir en cas d'erreur de la réponse du serveur. Une réponse sans échec utiliserait le type de retour de la méthode pour être transmise à l'application. 
 	
 	Par exemple une requête nécessitant une authentification qui n’aura pas pu être transmise avant que le token d’authentification périme ne pourra pas aboutir. Dans ce cas il faudra lever une exception pour prévenir l’application de cet échec et lui permettre de demander une nouvelle connexion à l’utilisateur et une fois celle-ci faite, renvoyer la requête échouée.
 	
-	Évidemment cela implique d’utiliser un système de sauvegarde, par exemple un cache, une base de données, ou autres, pour conserver les requêtes qui n’ont pu être traitées.  Et encore décidé de quels informations seront conservées pour que l’application puisse les réutiliser.
+	Évidemment cela implique d’utiliser un système de sauvegarde, par exemple un cache, une base de données, ou autre pour conserver les requêtes qui n’ont pu être traitées.  Et encore décider quelles informations seront conservées pour que l’application puisse les réutiliser.
 	
 	On pourrait proposer une méthode comme ceci : 
 	\begin{itemize}
 		\item sendRequest
 		\begin{itemize}
-			\item IllegalArgumentException : les paramètres reçu ne sont pas conforme à ceux attendus par la méthode.
+			\item IllegalArgumentException : les paramètres reçus ne sont pas conformes à ceux attendus par la méthode.
 			\item IOException : problème de communication sur le réseau
-			\item HTTPException : pour traiter les différents cas lié au code d'erreur HTTP. Exemple : code 401 Unauthorized, lorsque le serveur nécessite une connexion.
+			\item HTTPException : pour traiter les différents cas liés au code d'erreur HTTP. Exemple : code 401 Unauthorized, lorsque le serveur nécessite une connexion.
 		\end{itemize}
 	\end{itemize}
 	
@@ -180,7 +180,7 @@
 	\end{lstlisting}
 	
 	\subsubsection*{Dans le cas d’une transmission asynchrone}
-	Les transmissions asynchrones utilisent le concept de callback. C’est la méthode que nous avons utilisée dans notre labo. Pour pouvoir transmettre l’erreur à l’application principale il faut ajouter une méthode error à l’interface CommunicationEventListener qui sera appelée dans le cas d’une transaction échouée. La classe AsyncTransmission pourra retransmettre les informations nécessaires concernant l’erreur rencontrée au travers de cette méthode. 
+	Les transmissions asynchrones utilisent le concept de callback. C’est la méthode que nous avons utilisée dans notre labo. Pour pouvoir transmettre l’erreur à l’application principale, il faut ajouter une méthode error à l’interface CommunicationEventListener qui sera appelée dans le cas d’une transaction échouée. La classe AsyncTransmission pourra retransmettre les informations nécessaires concernant l’erreur rencontrée au travers de cette méthode. 
 	
 	Ainsi, comme pour l’autre solution, nous offrons la possibilité de réagir en cas d’erreur et de prendre les décisions utiles à l’application. 
 	
