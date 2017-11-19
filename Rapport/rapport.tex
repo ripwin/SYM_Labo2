@@ -110,6 +110,27 @@
 	
 	\section*{Manipulations}
 	
+	\subsection*{Manipulation 3.2 - Transmission différée}
+	
+	Pour cette manipulation nous avons créé la classe \textbf{DelayedTransmission} qui présente les même méthodes que la classe \textbf{AsyncTransmission}, mais qui s'occupe également d'envoyer à nouveau les requêtes qui n'ont pas pu être transmises en cas de perte de connexion. 
+	
+	\subsubsection*{Détection de l'erreur}
+	Les méthodes de la classe \textbf{OkHttpClient} permettent de spécifier une méthode de callback lorsqu'une erreur de transmission est survenue. Grâce à cela, lorsqu'elle est notifiée d'une telle erreur, la classe \textbf{DelayedTransmission} ajoute la requête fautive dans une liste de requêtes qu'il faudra tenter d'envoyer à nouveau. 
+	
+	\subsubsection*{Plannification d'une nouvelle tentative d'envoi}
+	Lorsqu'une requête à échoué, elle est donc ajoutée à cette liste et une nouvelle tentative est planifiée et sera exécutée dix secondes plus tard. La classe garde trace également de ces demandes et fait en sorte que de nouvelles tentatives ne soient pas planifiées si il y a déjà une tentative en attente d'être exécutée.
+	
+	\subsubsection*{Exécution d'une tentative}
+	Lorsqu'une tentative est exécutée, elle essaie d'envoyer toutes les requêtes présentes dans la liste de requêtes en échec et vide cette liste après coup. En suivant cette logique, si la connexion est revenue entretemps, les envois s'effectueront avec succès, En revanche si un problème de connexion persiste, une nouvelle tentative sera planifiée lorsque l'objet sera notifié d'une erreur d'envoi. 
+	
+	\subsubsection*{Exclusion mutuelle}
+	Toutes ces actions sont exécutées en exclusion mutuelle afin d'éviter d'ajouter une requête dans la liste alors que la classe est en train d'effectuer une nouvelle tentative. 
+	
+	\subsubsection*{Tests et affichage des résultats}
+	Nous avons testé cette classe en coupant le WIFI avant d'envoyer les requêtes, et en le rallumant une dizaine de secondes plus tard. Nous avons ensuite essayé en coupant le WIFI juste après avoir cliqué sur le bouton pour envoyer les requêtes. Dans les deux cas, les requêtes ont été envoyées à nouveau et les réponses nous sont parvenues. 
+	
+	Pour l'affichage des réponses du serveur, nous affichons la première ligne dans l'interface utilisateur et la réponse au complet dans la console. Chaque transmission possède un numéro incrémental pour mieux les distinguer.
+	
 	\section*{Réponse aux questions}
 	
 	\subsection*{Questions 1 - Traitement des erreurs}
