@@ -185,16 +185,16 @@
 	Ainsi, comme pour l’autre solution, nous offrons la possibilité de réagir en cas d’erreur et de prendre les décisions utiles à l’application. 
 	
 	\subsection*{Questions 2 - Authentification}
-	Si une authentification par le serveur est requise, peut-ont utiliser un protocole asynchrone ? Quelles seraient les restrictions ? Peut-on utiliser une transmission différée ?
+	Si une authentification par le serveur est requise, peut-on utiliser un protocole asynchrone ? Quelles seraient les restrictions ? Peut-on utiliser une transmission différée ?
 	
 	
 	{\color[rgb]{0,0.5,0.23}\textbf{Réponse}}
 	
 	L'authentification et l'utilisation d'une transmission différée n'est pas un problème avec les transmissions asynchrones. 
 	
-	Les restrictions peuvent être diverses. Comme soulevé à la question 1, si on lève des exceptions précisent permettant à l'application principale de gérer les erreurs du protocole, serveur ou client, il est possible de parer au problème d'identification. 
+	Les restrictions peuvent être diverses. Comme soulevé à la question 1, si on lève des exceptions précises permettant à l'application principale de gérer les erreurs du protocole, serveur ou client, il est possible de parer au problème d'identification. 
 	
-	Par exemple si on utilise un token pour identifier le client et que celui-ci n'est plus valide lors de l'envoi de la requête, on signale à l'application le problème au travers d'une exception. L'application pourra par exemple notifié l'utilisateur qu'une authentification est requise, et une fois celle-ci faite regénérer la requête. Cela implique de sauvegarder les requêtes n'ayant pas aboutie. 
+	Par exemple si on utilise un token pour identifier le client et que celui-ci n'est plus valide lors de l'envoi de la requête, on signale à l'application le problème au travers d'une exception. L'application pourra par exemple notifier l'utilisateur qu'une authentification est requise, et une fois celle-ci faite, regénérer la requête. Cela implique de sauvegarder les requêtes n'ayant pas abouti. 
 	
 	Il est également possible de mettre en place un système d'échange de clé pour authentifier le client. A noter que la clé ne doit pas être enregistré dans l'application avant son installation, sans quoi elle serait vulnérable.
 	
