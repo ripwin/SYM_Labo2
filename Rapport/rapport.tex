@@ -112,7 +112,7 @@
 	
 	\subsection*{Manipulation 3.2 - Transmission différée}
 	
-	Pour cette manipulation nous avons créé la classe \textbf{DelayedTransmission} qui présente les même méthodes que la classe \textbf{AsyncTransmission}, mais qui s'occupe également d'envoyer à nouveau les requêtes qui n'ont pas pu être transmises en cas de perte de connexion. 
+	Pour cette manipulation nous avons créé la classe \textbf{DelayedTransmission} qui présente les mêmes méthodes que la classe \textbf{AsyncTransmission}, mais qui s'occupe également d'envoyer à nouveau les requêtes qui n'ont pas pu être transmises en cas de perte de connexion. 
 	
 	\subsubsection*{Détection de l'erreur}
 	Les méthodes de la classe \textbf{OkHttpClient} permettent de spécifier une méthode de callback lorsqu'une erreur de transmission est survenue. Grâce à cela, lorsqu'elle est notifiée d'une telle erreur, la classe \textbf{DelayedTransmission} ajoute la requête fautive dans une liste de requêtes qu'il faudra tenter d'envoyer à nouveau. 
@@ -134,10 +134,10 @@
 	\subsubsection*{Limitations}
 	Les limitations de cette solutions sont évidentes. La liste de requêtes en échec sont contenues en mémoire dans l'instance de l'activité en question. Si l'utilisateur quitte l'activité, ou quitte l'application avant que les requêtes soient effectuées avec succès, la liste de requêtes qui ont échouées seront perdues. 
 	
-	Cela peut poser problème dans de très nombreux domaines. Une solution possible serait de sauvegarder les informations en mémoire persistante lorsque l'activité en question est détruite et de lire ces informations lorsqu'on démarre à nouveau l'application ou l'activité concernée. Cela deviendra vite difficile de garder un logicielle modulable cela dit.
+	Cela peut poser problème dans de très nombreux domaines. Une solution possible serait de sauvegarder les informations en mémoire persistante lorsque l'activité en question est détruite et de lire ces informations lorsqu'on démarre à nouveau l'application ou l'activité concernée. Cela deviendra vite difficile de garder un logiciel modulable cela dit.
 	
 	\subsubsection*{JobScheduler}
-	Depuis Android 5.0 (Lollipop), la class abstraite JobScheduler est proposée et permet de de planifier des actions à effectuer. Apparemment elle permet de planifier des actions non seulement à certains intervalles de temps, mais également lorsque certaines conditions sont remplies. On pourrait donc utiliser cet API pour gérer nos requêtes qui ont échouées et demander qu'elles soient envoyées lorsque l'appareil possède à nouveau une connexion internet. 
+	Depuis Android 5.0 (Lollipop), la class abstraite JobScheduler est proposée et permet de planifier des actions à effectuer. Apparemment elle permet de planifier des actions non seulement à certains intervalles de temps, mais également lorsque certaines conditions sont remplies. On pourrait donc utiliser cette fonctionnalité pour gérer nos requêtes qui ont échoué et demander qu'elles soient envoyées lorsque l'appareil possède à nouveau une connexion internet. 
 	
 	\textbf{Sources (consultées le 19.11.2017) :}
 	
